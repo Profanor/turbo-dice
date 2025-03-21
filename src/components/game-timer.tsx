@@ -1,6 +1,6 @@
-import { FC } from "react";
-import { Clock } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { FC } from 'react';
+import { Clock } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 
 interface TimerContainerProps {
   timer: number;
@@ -19,9 +19,7 @@ export const TimerContainer: FC<TimerContainerProps> = ({ timer, formatTime, isT
           <div className={`text-xl font-bold ${timer <= 5 ? 'text-red-500 animate-pulse' : 'text-sky-400'}`}>
             {formatTime(timer)}
           </div>
-          <div className="text-xs text-gray-400 mt-1">
-            {isTimerRunning ? 'Game in progress' : 'Waiting to start'}
-          </div>
+          <div className="text-xs text-gray-400 mt-1">{isTimerRunning ? 'Game in progress' : 'Waiting to start'}</div>
         </div>
       </div>
     </Card>

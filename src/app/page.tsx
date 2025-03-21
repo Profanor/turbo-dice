@@ -128,22 +128,21 @@ export default function DiceBetGame() {
   };
 
   useEffect(() => {
-  const fetchBalance = async () => {
-    try {
-      const response = await fetch("/api/balance");
-      if (!response) {
-        throw new Error(`API error: ${Error}`);
+    const fetchBalance = async () => {
+      try {
+        const response = await fetch('/api/balance');
+        if (!response) {
+          throw new Error(`API error: ${Error}`);
+        }
+        const data = await response.json();
+        setBalance(data.balance);
+      } catch (error) {
+        console.error('Failed to fetch balance', error);
       }
-      const data = await response.json();
-      setBalance(data.balance);
-    } catch (error) {
-      console.error("Failed to fetch balance", error);
-    }
-  };
+    };
 
-  fetchBalance();
-}, []);
-
+    fetchBalance();
+  }, []);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -179,7 +178,7 @@ export default function DiceBetGame() {
 
   const renderTabContent = () => {
     return (
-      <TabContent 
+      <TabContent
         activeTab={activeTab}
         ongoingBets={ongoingBets}
         endedBets={endedBets}
@@ -205,7 +204,7 @@ export default function DiceBetGame() {
             <RecentResultsDisplay recentResults={recentResults} />
 
             {/* dice container */}
-            <DiceRollDisplay rolling = {rolling} result={result} />
+            <DiceRollDisplay rolling={rolling} result={result} />
 
             {/* bet controls section */}
             <div className="flex flex-col sm:flex-row gap-4">
@@ -229,41 +228,44 @@ export default function DiceBetGame() {
           </div>
 
           {/* leaderboard section with tabs */}
-          <div className="w-full lg:w-1/3 flex flex-col gap-4">
-            {/* Tab navigation */}
-            <div className="bg-gray-800/80 backdrop-blur-sm rounded-full border-2 border-sky-500/30 shadow-lg shadow-sky-500/10 p-1 flex">
-              <button
-                onClick={() => setActiveTab('leaderboard')}
-                className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
-                  activeTab === 'leaderboard' ? 'bg-black text-sky-400' : 'text-gray-400 hover:text-gray-300'
-                }`}
-              >
-                Leaderboard
-              </button>
-              <button
-                onClick={() => setActiveTab('mybets')}
-                className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
-                  activeTab === 'mybets' ? 'bg-black text-sky-400' : 'text-gray-400 hover:text-gray-300'
-                }`}
-              >
-                My Bets
-              </button>
-              <button
-                onClick={() => setActiveTab('top')}
-                className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
-                  activeTab === 'top' ? 'bg-black text-sky-400' : 'text-gray-400 hover:text-gray-300'
-                }`}
-              >
-                Top
-              </button>
-            </div>
+          <div className="w-full lg:w-1/3 flex flex-col gap-4 h-full">
+            {/* Tab content container */}
+            <Card className="w-full flex flex-col bg-gray-800/80 backdrop-blur-sm rounded-lg border-2 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4 min-h-[700px]">
+              {/* Tab navigation */}
+              <div className="bg-gray-800/80 backdrop-blur-sm rounded-full border-2 border-sky-500/30 shadow-lg shadow-sky-500/10 p-1 flex mb-4">
+                <button
+                  onClick={() => setActiveTab('leaderboard')}
+                  className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
+                    activeTab === 'leaderboard' ? 'bg-black text-sky-400' : 'text-gray-400 hover:text-gray-300'
+                  }`}
+                >
+                  Leaderboard
+                </button>
+                <button
+                  onClick={() => setActiveTab('mybets')}
+                  className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
+                    activeTab === 'mybets' ? 'bg-black text-sky-400' : 'text-gray-400 hover:text-gray-300'
+                  }`}
+                >
+                  My Bets
+                </button>
+                <button
+                  onClick={() => setActiveTab('top')}
+                  className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
+                    activeTab === 'top' ? 'bg-black text-sky-400' : 'text-gray-400 hover:text-gray-300'
+                  }`}
+                >
+                  Top
+                </button>
+              </div>
 
-            {/* players count */}
-            <PlayersCount count={leaderboard.length} />
+              {/* Players count (joins) */}
+              <PlayersCount count={leaderboard.length} />
 
-            {/* tab content container */}
-            <Card className="w-full bg-gray-800/80 backdrop-blur-sm rounded-lg border-2 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4">
-              {renderTabContent()}
+              {/* Main content should push items to the bottom before scrolling */}
+              <div className="flex-1 min-h-0 overflow-y-auto">
+                <div className="flex flex-col h-full justify-between">{renderTabContent()}</div>
+              </div>
 
               <div className="mt-4 pt-4 border-t border-gray-700 flex justify-between items-center">
                 <span className="text-xs text-gray-400">This game is powered by</span>

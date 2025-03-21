@@ -1,6 +1,6 @@
-import { FC } from "react";
-import { Card } from "@/components/ui/card";
-import { motion, AnimatePresence } from "framer-motion";
+import { FC } from 'react';
+import { Card } from '@/components/ui/card';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface DiceRollDisplayProps {
   rolling: boolean;

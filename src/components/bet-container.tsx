@@ -1,8 +1,8 @@
-import { FC, useRef } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { FC, useRef } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface BetContainerProps {
   autoBet: boolean;
@@ -12,7 +12,7 @@ interface BetContainerProps {
   betAmounts: number[];
   selectedBet: number | null;
   setSelectedBet: (value: number) => void;
-  scrollBets: (direction: "left" | "right") => void;
+  scrollBets: (direction: 'left' | 'right') => void;
   rollDice: () => void;
   rolling: boolean;
 }
@@ -55,12 +55,14 @@ const BetContainer: FC<BetContainerProps> = ({
                 type="button"
                 title="Auto Bet"
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-500 ${
-                  autoBet ? "bg-sky-500" : "bg-gray-600"
+                  autoBet ? 'bg-sky-500' : 'bg-gray-600'
                 }`}
               >
-                <span className={`${autoBet ? "translate-x-6" : "translate-x-1"} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`} />
+                <span
+                  className={`${autoBet ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                />
               </button>
-              <label className="text-xs text-gray-200">{autoBet ? "On" : "Off"}</label>
+              <label className="text-xs text-gray-200">{autoBet ? 'On' : 'Off'}</label>
             </div>
             <div className="flex items-center gap-2">
               <label htmlFor="autoBetRounds" className="text-xs text-gray-300">
@@ -83,24 +85,24 @@ const BetContainer: FC<BetContainerProps> = ({
               variant="ghost"
               size="icon"
               className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-transparent text-sky-400 hover:bg-gray-800/30"
-              onClick={() => scrollBets("left")}
+              onClick={() => scrollBets('left')}
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <div
               ref={scrollContainerRef}
               className="flex space-x-2 pb-2 px-8 overflow-x-auto scrollbar-hide"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
               {betAmounts.map((amount) => (
                 <motion.div key={amount} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
-                    variant={selectedBet === amount ? "default" : "outline"}
+                    variant={selectedBet === amount ? 'default' : 'outline'}
                     onClick={() => setSelectedBet(amount)}
                     className={`px-3 py-2 text-sm transition-all flex-shrink-0 ${
                       selectedBet === amount
-                        ? "bg-sky-600 text-white border border-sky-500"
-                        : "bg-gray-800 text-gray-400 hover:bg-gray-700 opacity-40 hover:opacity-70"
+                        ? 'bg-sky-600 text-white border border-sky-500'
+                        : 'bg-gray-800 text-gray-400 hover:bg-gray-700 opacity-40 hover:opacity-70'
                     }`}
                   >
                     {amount}
@@ -112,7 +114,7 @@ const BetContainer: FC<BetContainerProps> = ({
               variant="ghost"
               size="icon"
               className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-transparent text-sky-400 hover:bg-gray-800/30"
-              onClick={() => scrollBets("right")}
+              onClick={() => scrollBets('right')}
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -123,7 +125,7 @@ const BetContainer: FC<BetContainerProps> = ({
               disabled={!selectedBet || rolling}
               className="w-full sm:w-auto py-2 px-4 text-sm bg-gradient-to-r from-sky-400 to-white hover:from-sky-500 hover:to-sky-100 text-black font-bold transition-all duration-300"
             >
-              {rolling ? "Rolling..." : "Bet & Roll"}
+              {rolling ? 'Rolling...' : 'Bet & Roll'}
             </Button>
           </motion.div>
         </div>

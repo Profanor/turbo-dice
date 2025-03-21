@@ -1,5 +1,5 @@
-import { DollarSign, HelpCircle, Clock, User, MessageCircle } from "lucide-react";
-import { motion } from "framer-motion";
+import { DollarSign, HelpCircle, Clock, User, MessageCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface GameHeaderProps {
   balance: number;
