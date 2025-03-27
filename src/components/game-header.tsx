@@ -13,7 +13,7 @@ interface GameHeaderProps {
 }
 
 const GameHeader: React.FC<GameHeaderProps> = ({ initialBalance, timer, formatTime }) => {
-  const { isConnected, emitEvent, onEvent } = useGameSocket('lw8c5kGI', 'U2FsdGVkX1%2Bz37p8imvFyO%2FvGP3bCt09Todz3RIRUvSVMwiex11xmP3QK2RYrlpIhYHmH9mn%2F61Vhqma1C0ztGCJy4rIw8NcHiiTS%2FxYh3qi9v7dSPmpo5ZCkCYu42nWD5yoymfBDxF4o0GeLIL25SOwo2ofo315eM0zKCFgUoPjIt5ahWkwymdhxYTOoFEsLW7j13QfBSOhDe0BpLzZDw%3D%3D');
+  const { isConnected, emitEvent, onEvent } = useGameSocket('ATyIui7r', 'U2FsdGVkX18RhZRcTnKv5FVO%2FaKMfFLGRyMCt0sNPNq41M%2Bl2OQfzSD1%2FV5Xya%2BWjcK2gH8Y4D8dioctTVYjXB70FLlpm%2FkG6DwOZ%2FLZ182R7dfCBT0HCixiwS8zGMEnNNQBmD624WQQLw8uERVpEg63zKUjzCqisgP5DxIitaRYFEoTrttER9uLa%2FhShZaU3NHiqMDqbc3ues7%2BgKXyPw%3D%3D');
 
   const [balance, setBalance] = useState(initialBalance);
 
@@ -22,7 +22,7 @@ const GameHeader: React.FC<GameHeaderProps> = ({ initialBalance, timer, formatTi
     console.log('WebSocket Connection Status:', isConnected);
 
     if (isConnected) {
-      const data = JSON.stringify({ userId: 'dave123', gameId: 'examp123' }); 
+      const data = JSON.stringify({ userId: 7 }); 
       emitEvent('game:join', data);
 
       // listen for balance updates
