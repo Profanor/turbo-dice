@@ -1,12 +1,20 @@
+interface EndedBet {
+  id: string;
+  betid: number | string;
+  betAmount: number;
+  status: 'win' | 'loss';
+}
+
 export const ongoingBets = [
-  { id: 'BET-001', score: 4, currentWin: 200 },
-  { id: 'BET-002', score: 3, currentWin: 150 },
+  { id: '1', betid: 'A1', score: 100, currentWin: 50 },
+  { id: '2', betid: 'A2', score: 200, currentWin: 100 },
+  { id: '3', betid: 'A3', score: 300, currentWin: 150 },
 ];
 
-export const endedBets = [
-  { id: 'BET-003', betAmount: 100, status: 'win' },
-  { id: 'BET-004', betAmount: 200, status: 'loss' },
-  { id: 'BET-005', betAmount: 500, status: 'win' },
+export const endedBets: EndedBet[] = [
+  { id: '1', betid: '101', betAmount: 100, status: 'win' },
+  { id: '2', betid: '102', betAmount: 200, status: 'loss' },
+  { id: '3', betid: '103', betAmount: 300, status: 'win' },
 ];
 
 export const topPlayers = {

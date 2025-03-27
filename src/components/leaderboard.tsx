@@ -116,7 +116,7 @@ export const TabContent: React.FC<TabContentProps> = ({
 
           {myBetsSubTab === 'ongoing' ? (
             <>
-              {/* Ongoing bets header */}
+              {/* ongoing bets header */}
               <div className="grid grid-cols-3 gap-2 mb-2 text-xs text-gray-400 font-semibold border-b border-gray-700 pb-2">
                 <div>Bet ID</div>
                 <div>Score</div>
@@ -143,7 +143,7 @@ export const TabContent: React.FC<TabContentProps> = ({
             </>
           ) : (
             <>
-              {/* Ended bets header */}
+              {/* ended bets header */}
               <div className="grid grid-cols-3 gap-2 mb-2 text-xs text-gray-400 font-semibold border-b border-gray-700 pb-2">
                 <div>Bet ID</div>
                 <div>Bet Amount</div>
@@ -187,14 +187,15 @@ export const TabContent: React.FC<TabContentProps> = ({
           )}
         </>
       );
+
     case 'top':
       return (
         <>
-          {/* Top sub-tabs with proper spacing */}
-          <div className="flex mb-6 border-b border-gray-700 space-x-8 justify-center">
+          {/* top sub-tabs */}
+          <div className="flex mb-6 border-b border-gray-700 space-x-4 md:space-x-8 justify-center">
             <button
               onClick={() => setTopSubTab('day')}
-              className={`px-6 py-2 text-sm font-medium ${
+              className={`px-3 md:px-6 py-2 text-sm font-medium ${
                 topSubTab === 'day' ? 'text-sky-400 border-b-2 border-sky-400' : 'text-gray-400 hover:text-gray-300'
               }`}
             >
@@ -202,7 +203,7 @@ export const TabContent: React.FC<TabContentProps> = ({
             </button>
             <button
               onClick={() => setTopSubTab('month')}
-              className={`px-6 py-2 text-sm font-medium ${
+              className={`px-3 md:px-6 py-2 text-sm font-medium ${
                 topSubTab === 'month' ? 'text-sky-400 border-b-2 border-sky-400' : 'text-gray-400 hover:text-gray-300'
               }`}
             >
@@ -210,7 +211,7 @@ export const TabContent: React.FC<TabContentProps> = ({
             </button>
             <button
               onClick={() => setTopSubTab('year')}
-              className={`px-6 py-2 text-sm font-medium ${
+              className={`px-3 md:px-6 py-2 text-sm font-medium ${
                 topSubTab === 'year' ? 'text-sky-400 border-b-2 border-sky-400' : 'text-gray-400 hover:text-gray-300'
               }`}
             >
@@ -224,22 +225,22 @@ export const TabContent: React.FC<TabContentProps> = ({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="flex items-center px-6 py-5 mb-4 rounded-lg bg-gray-700/50"
+              className="flex items-center px-3 sm:px-6 py-4 sm:py-5 mb-4 rounded-lg bg-gray-700/50"
             >
               {/* Trophy & Date */}
-              <div className="flex flex-col items-center mr-10">
+              <div className="flex flex-col items-center mr-3 sm:mr-6 md:mr-10 shrink-0">
                 <Trophy className="h-5 w-5 text-yellow-400" />
                 <span className="text-[10px] text-gray-300">{player.date}</span>
               </div>
 
               {/* Avatar */}
-              <div className="flex items-center justify-center bg-gray-600 rounded-full h-8 w-8 text-white font-bold mr-6">
+              <div className="flex items-center justify-center bg-gray-600 rounded-full h-8 w-8 text-white font-bold mr-3 sm:mr-4 md:mr-6 shrink-0">
                 {player.avatar}
               </div>
 
               {/* Player Stats */}
-              <div className="flex flex-col ml-12">
-                <div className="grid grid-cols-2">
+              <div className="flex flex-col flex-1">
+                <div className="grid grid-cols-2 gap-x-2 w-full">
                   <span className="text-[10px] text-gray-400">Bet Amount: </span>
                   <span className="text-[11px] text-white">{player.betAmount}</span>
 

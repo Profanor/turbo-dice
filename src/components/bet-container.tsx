@@ -113,8 +113,9 @@ const BetContainer: FC<BetContainerProps> = ({
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-transparent text-sky-400 hover:bg-gray-800/30"
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800/50 text-sky-400 hover:bg-gray-800/70"
               onClick={() => scrollBets('right')}
+              aria-label="Scroll right"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>

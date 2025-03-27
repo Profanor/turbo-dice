@@ -1,5 +1,4 @@
 import { Clock } from 'lucide-react';
-
 interface FloatingTimerProps {
   timer: number;
   formatTime: (time: number) => string;
