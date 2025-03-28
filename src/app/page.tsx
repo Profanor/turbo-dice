@@ -1,11 +1,14 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { FloatingTimer } from '@/components/floating-timer';
 import { TimerContainer } from '@/components/game-timer';
 import { DiceRollDisplay } from '@/components/dice-roll-display';
 import { LeaderboardTab, MyBetsSubTab, TopSubTab } from '@/components/tab-content';
 import { ongoingBets, endedBets, topPlayers } from './mock-data';
+import { useGameTimer } from './hooks/useGameTimer';
+import { useAutoBet } from './hooks/useAutoBet';
+import { formatTime } from '@/utils/time';
 import BetContainer from '@/components/bet-container';
 import Leaderboard from '@/components/tab-content';
 import GameHeader from '@/components/game-header';
@@ -28,37 +31,37 @@ export default function DiceBetGame() {
   >([]);
   const [autoBet, setAutoBet] = useState(false);
   const [autoBetRounds, setAutoBetRounds] = useState(1);
-  const [timer, setTimer] = useState(10);
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [activeTab, setActiveTab] = useState<LeaderboardTab>('leaderboard');
   const [myBetsSubTab, setMyBetsSubTab] = useState<MyBetsSubTab>('ongoing');
   const [topSubTab, setTopSubTab] = useState<TopSubTab>('day');
 
-  const autoBetCountRef = useRef(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const scrollBets = (direction: 'left' | 'right') => {
-    if (scrollContainerRef.current) {
-      const scrollAmount = 200 * (direction === 'left' ? -1 : 1);
-      scrollContainerRef.current.scrollTo({
-        left: scrollContainerRef.current.scrollLeft + scrollAmount,
-        behavior: 'smooth',
-      });
-    }
+  const endGame = () => {
+    setLeaderboard((prev) =>
+      prev.map((player) => {
+        const isWin = player.score > 3;
+        return {
+          ...player,
+          status: isWin ? 'win' : 'loss',
+        };
+      }),
+    );
   };
+
+  const { timer, isRunning: isTimerRunning, startTimer } = useGameTimer(10, endGame);
 
   const rollDice = () => {
     if (!selectedBet) return;
+
     setRolling(true);
     setResult(null);
 
-    if (!isTimerRunning) {
-      startTimer();
-    }
+    if (!isTimerRunning) startTimer();
 
     setTimeout(() => {
       const finalResult = Math.floor(Math.random() * 6) + 1;
+
       setResult(finalResult);
       setRecentResults((prev) => {
         const updated = [finalResult, ...prev];
@@ -81,69 +84,18 @@ export default function DiceBetGame() {
     }, 1000);
   };
 
-  const startTimer = () => {
-    setIsTimerRunning(true);
-    setTimer(10);
+  useAutoBet(rolling, result, autoBet, autoBetRounds, rollDice, setAutoBet);
 
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
+  const scrollBets = (direction: 'left' | 'right') => {
+    if (!scrollContainerRef.current) return;
 
-    timerRef.current = setInterval(() => {
-      setTimer((prevTime) => {
-        if (prevTime <= 1) {
-          clearInterval(timerRef.current as NodeJS.Timeout);
-          setIsTimerRunning(false);
-          endGame();
-          return 0;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
+    const scrollAmount = scrollContainerRef.current.clientWidth * 0.5 * (direction === 'left' ? -1 : 1);
+
+    scrollContainerRef.current.scrollBy({
+      left: scrollAmount,
+      behavior: 'smooth',
+    });
   };
-
-  const endGame = () => {
-    setLeaderboard((prev) =>
-      prev.map((player) => {
-        const isWin = player.score > 3;
-        return {
-          ...player,
-          status: isWin ? 'win' : 'loss',
-        };
-      }),
-    );
-  };
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  useEffect(() => {
-    if (autoBet) {
-      autoBetCountRef.current = 0;
-    }
-  }, [autoBet]);
-
-  useEffect(() => {
-    if (!rolling && result !== null && autoBet) {
-      autoBetCountRef.current += 1;
-      if (autoBetCountRef.current < autoBetRounds) {
-        rollDice();
-      } else {
-        setAutoBet(false);
-      }
-    }
-  }, [rolling, result, autoBet, autoBetRounds]);
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, []);
 
   return (
     <div className="min-h-screen w-full bg-black text-white flex flex-col items-start">

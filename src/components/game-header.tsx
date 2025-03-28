@@ -14,27 +14,28 @@ interface GameHeaderProps {
 }
 
 const GameHeader: React.FC<GameHeaderProps> = ({ initialBalance, timer, formatTime }) => {
-  const { isConnected, emitEvent, onEvent } = useGameSocket('ATyIui7r', 'U2FsdGVkX18RhZRcTnKv5FVO%2FaKMfFLGRyMCt0sNPNq41M%2Bl2OQfzSD1%2FV5Xya%2BWjcK2gH8Y4D8dioctTVYjXB70FLlpm%2FkG6DwOZ%2FLZ182R7dfCBT0HCixiwS8zGMEnNNQBmD624WQQLw8uERVpEg63zKUjzCqisgP5DxIitaRYFEoTrttER9uLa%2FhShZaU3NHiqMDqbc3ues7%2BgKXyPw%3D%3D');
+  const { isConnected, emitEvent, onEvent } = useGameSocket(
+    'ATyIui7r',
+    'U2FsdGVkX18RhZRcTnKv5FVO%2FaKMfFLGRyMCt0sNPNq41M%2Bl2OQfzSD1%2FV5Xya%2BWjcK2gH8Y4D8dioctTVYjXB70FLlpm%2FkG6DwOZ%2FLZ182R7dfCBT0HCixiwS8zGMEnNNQBmD624WQQLw8uERVpEg63zKUjzCqisgP5DxIitaRYFEoTrttER9uLa%2FhShZaU3NHiqMDqbc3ues7%2BgKXyPw%3D%3D',
+  );
 
-  const [ balance, setBalance ] = useState(initialBalance);
+  const [balance, setBalance] = useState(initialBalance);
 
   useEffect(() => {
-  console.log('GameHeader Mounted');
-  console.log('WebSocket Connection Status:', isConnected);
+    console.log('GameHeader Mounted');
+    console.log('WebSocket Connection Status:', isConnected);
 
-  onEvent('get_user_balance', (encryptedData: string) => {
+    onEvent('get_user_balance', (encryptedData: string) => {
+      const decrypted = decryptData(encryptedData);
 
-    const decrypted = decryptData(encryptedData);
-
-    if (decrypted && decrypted.balance !== undefined) {
-      setBalance(decrypted.balance);
-      console.log('Balance', decrypted.balance)
-    } else {
-      console.error('Decryption failed or invalid balance data');
-    }
-  });
-}, [isConnected, emitEvent, onEvent]);
-
+      if (decrypted && decrypted.balance !== undefined) {
+        setBalance(decrypted.balance);
+        console.log('Balance', decrypted.balance);
+      } else {
+        console.error('Decryption failed or invalid balance data');
+      }
+    });
+  }, [isConnected, emitEvent, onEvent]);
 
   return (
     <div className="w-full bg-gray-800/80 backdrop-blur-sm shadow-lg shadow-sky-500/10 py-3 px-4 sm:px-6 mb-6">

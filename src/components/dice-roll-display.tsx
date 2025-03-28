@@ -1,13 +1,13 @@
-"use client"
+'use client';
 
-import type { FC } from "react"
-import { Card } from "@/components/ui/card"
+import type { FC } from 'react';
+import { Card } from '@/components/ui/card';
 // import { useGameSocket } from '@/app/socketService';
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface DiceRollDisplayProps {
-  rolling: boolean
-  result: number | null
+  rolling: boolean;
+  result: number | null;
 }
 
 export const DiceRollDisplay: FC<DiceRollDisplayProps> = ({ rolling, result }) => {
@@ -50,5 +50,5 @@ export const DiceRollDisplay: FC<DiceRollDisplayProps> = ({ rolling, result }) =
         </AnimatePresence>
       </div>
     </Card>
-  )
-}
+  );
+};
