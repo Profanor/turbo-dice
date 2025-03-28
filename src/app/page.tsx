@@ -4,17 +4,16 @@ import { useState, useRef, useEffect } from 'react';
 import { FloatingTimer } from '@/components/floating-timer';
 import { TimerContainer } from '@/components/game-timer';
 import { DiceRollDisplay } from '@/components/dice-roll-display';
-import Leaderboard from '@/components/tab-content';
 import { LeaderboardTab, MyBetsSubTab, TopSubTab } from '@/components/tab-content';
 import { ongoingBets, endedBets, topPlayers } from './mock-data';
 import BetContainer from '@/components/bet-container';
-import RecentResultsDisplay from '@/components/recent-results-display';
+import Leaderboard from '@/components/tab-content';
 import GameHeader from '@/components/game-header';
+import RecentResultsDisplay from '@/components/recent-results-display';
 
 const betAmounts = [50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000];
 
 export default function DiceBetGame() {
-  // const [balance, setBalance] = useState(0);
   const [selectedBet, setSelectedBet] = useState<number | null>(null);
   const [rolling, setRolling] = useState(false);
   const [result, setResult] = useState<number | null>(null);
