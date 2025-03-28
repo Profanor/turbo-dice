@@ -16,10 +16,10 @@ interface GameHeaderProps {
 }
 
 const GameHeader: React.FC<GameHeaderProps> = ({ initialBalance, timer, formatTime }) => {
-  const { isConnected, emitEvent, onEvent } = useGameSocket(
-    'ATyIui7r',
-    'U2FsdGVkX18RhZRcTnKv5FVO%2FaKMfFLGRyMCt0sNPNq41M%2Bl2OQfzSD1%2FV5Xya%2BWjcK2gH8Y4D8dioctTVYjXB70FLlpm%2FkG6DwOZ%2FLZ182R7dfCBT0HCixiwS8zGMEnNNQBmD624WQQLw8uERVpEg63zKUjzCqisgP5DxIitaRYFEoTrttER9uLa%2FhShZaU3NHiqMDqbc3ues7%2BgKXyPw%3D%3D',
-  );
+
+  const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || '';
+  const cesload = process.env.NEXT_PUBLIC_HASH || '';
+  const { isConnected, emitEvent, onEvent } = useGameSocket(clientId, cesload,);
 
   const [balance, setBalance] = useState(initialBalance);
 

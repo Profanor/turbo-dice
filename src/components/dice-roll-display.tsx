@@ -11,7 +11,6 @@ interface DiceRollDisplayProps {
 }
 
 export const DiceRollDisplay: FC<DiceRollDisplayProps> = ({ rolling, result }) => {
-  // const { isConnected, emitEvent, onEvent } = useGameSocket('ATyIui7r', 'U2FsdGVkX18RhZRcTnKv5FVO%2FaKMfFLGRyMCt0sNPNq41M%2Bl2OQfzSD1%2FV5Xya%2BWjcK2gH8Y4D8dioctTVYjXB70FLlpm%2FkG6DwOZ%2FLZ182R7dfCBT0HCixiwS8zGMEnNNQBmD624WQQLw8uERVpEg63zKUjzCqisgP5DxIitaRYFEoTrttER9uLa%2FhShZaU3NHiqMDqbc3ues7%2BgKXyPw%3D%3D');
   return (
     <Card className="relative w-full h-[250px] sm:h-[400px] md:h-[450px] lg:h-[500px] bg-black backdrop-blur-sm rounded-lg border-2 border-sky-500/30 shadow-lg shadow-sky-500/10">
       <div className="flex flex-col items-center justify-center h-full">

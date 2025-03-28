@@ -30,28 +30,35 @@ const BetContainer: FC<BetContainerProps> = ({
   betAmounts,
   selectedBet,
   setSelectedBet,
+  rollDice,
   rolling,
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const { isConnected, emitEvent, onEvent } = useGameSocket('ATyIui7r', 'U2FsdGVkX18RhZRcTnKv5FVO%2FaKMfFLGRyMCt0sNPNq41M%2Bl2OQfzSD1%2FV5Xya%2BWjcK2gH8Y4D8dioctTVYjXB70FLlpm%2FkG6DwOZ%2FLZ182R7dfCBT0HCixiwS8zGMEnNNQBmD624WQQLw8uERVpEg63zKUjzCqisgP5DxIitaRYFEoTrttER9uLa%2FhShZaU3NHiqMDqbc3ues7%2BgKXyPw%3D%3D');
 
-  const rollDice = () => {
+  const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || '';
+  const cesload = process.env.NEXT_PUBLIC_HASH || '';
+  const { isConnected, emitEvent, onEvent } = useGameSocket(clientId, cesload);
+
+  const handleRollDice = () => {
   if (!selectedBet || !isConnected) return;
 
   const payload = {
     stakeAmount: selectedBet,
-    instantTournamentId: 610,
+    instantTournamentId: 630,
   };
 
   const encryptedPayload = encryptData(payload);
   if (encryptedPayload) {
-    encryptedPayload.then((payload) => {
-      if (payload) {
+    encryptedPayload
+      .then((payload) => {
+        if (payload) {
         emitEvent('play_instant_tournament_game', payload);
+        rollDice();
       } else {
         console.error('Failed to encrypt payload');
       }
-    }).catch((error) => {
+    })
+    .catch((error) => {
       console.error('Encryption error:', error);
     });
   } else {
@@ -166,7 +173,7 @@ const scrollBets = (direction: 'left' | 'right') => {
           </div>
           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full sm:w-auto sm:ml-2">
             <Button
-              onClick={rollDice}
+              onClick={handleRollDice}
               disabled={!selectedBet || rolling}
               className="w-full sm:w-auto py-2 px-4 text-sm bg-gradient-to-r from-sky-400 to-white hover:from-sky-500 hover:to-sky-100 text-black font-bold transition-all duration-300"
             >
