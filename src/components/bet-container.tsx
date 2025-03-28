@@ -1,8 +1,13 @@
-import { FC, useRef } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client'
+
+import { FC, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useGameSocket } from '@/app/socketService';
+import { decryptData, encryptData } from '@/lib/crypto-utils';
 
 interface BetContainerProps {
   autoBet: boolean;
@@ -25,12 +30,51 @@ const BetContainer: FC<BetContainerProps> = ({
   betAmounts,
   selectedBet,
   setSelectedBet,
-  rollDice,
   rolling,
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const { isConnected, emitEvent, onEvent } = useGameSocket('ATyIui7r', 'U2FsdGVkX18RhZRcTnKv5FVO%2FaKMfFLGRyMCt0sNPNq41M%2Bl2OQfzSD1%2FV5Xya%2BWjcK2gH8Y4D8dioctTVYjXB70FLlpm%2FkG6DwOZ%2FLZ182R7dfCBT0HCixiwS8zGMEnNNQBmD624WQQLw8uERVpEg63zKUjzCqisgP5DxIitaRYFEoTrttER9uLa%2FhShZaU3NHiqMDqbc3ues7%2BgKXyPw%3D%3D');
 
-  const scrollBets = (direction: 'left' | 'right') => {
+  const rollDice = () => {
+  if (!selectedBet || !isConnected) return;
+
+  const payload = {
+    stakeAmount: selectedBet,
+    instantTournamentId: 610,
+  };
+
+  const encryptedPayload = encryptData(payload);
+  if (encryptedPayload) {
+    encryptedPayload.then((payload) => {
+      if (payload) {
+        emitEvent('play_instant_tournament_game', payload);
+      } else {
+        console.error('Failed to encrypt payload');
+      }
+    }).catch((error) => {
+      console.error('Encryption error:', error);
+    });
+  } else {
+    console.error('Failed to encrypt payload');
+  }
+};
+
+  useEffect(() => {
+    console.log('BetContainer Mounted');
+    console.log('WebSocket Connection Status:', isConnected);
+
+  onEvent('played_instant_tournament_game', (encryptedData: string) => {
+    const decrypted = decryptData(encryptedData);
+    
+    if (decrypted) {
+      console.log('Game Result:', decrypted);
+    } else {
+      console.error('Decryption failed: received malformed data');
+    }
+  });
+}, [isConnected, onEvent]);
+
+const scrollBets = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
       const scrollAmount = 200 * (direction === 'left' ? -1 : 1);
       scrollContainerRef.current.scrollTo({

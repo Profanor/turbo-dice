@@ -1,3 +1,5 @@
+'use client'
+
 import { DollarSign, HelpCircle, Clock, MessageCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useGameSocket } from '@/app/socketService';
@@ -25,14 +27,18 @@ const GameHeader: React.FC<GameHeaderProps> = ({ initialBalance, timer, formatTi
     console.log('GameHeader Mounted');
     console.log('WebSocket Connection Status:', isConnected);
 
-    onEvent('get_user_balance', (encryptedData: string) => {
-      const decrypted = decryptData(encryptedData);
+    onEvent('get_user_balance', async (encryptedData: string) => {
+      try {
+        const decrypted = await decryptData(encryptedData);
 
-      if (decrypted && decrypted.balance !== undefined) {
-        setBalance(decrypted.balance);
-        console.log('Balance', decrypted.balance);
-      } else {
-        console.error('Decryption failed or invalid balance data');
+        if (decrypted && decrypted.balance !== undefined) {
+          setBalance(decrypted.balance);
+          console.log('Balance', decrypted.balance);
+        } else {
+          console.error('Decryption failed or invalid balance data');
+        }
+      } catch (error) {
+        console.error('Error decrypting data:', error);
       }
     });
   }, [isConnected, emitEvent, onEvent]);

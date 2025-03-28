@@ -49,7 +49,7 @@ export const useGameSocket = (clientId: string, cesLoad: string) => {
   }, [clientId, cesLoad]);
 
   const emitEvent = (event: string, data: string) => {
-    socketRef.current?.emit(event, JSON.stringify(data));
+    socketRef.current?.emit(event, data);
   };
 
   const onEvent = (event: string, callback: (data: any) => void) => {

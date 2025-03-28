@@ -1,25 +1,16 @@
-import CryptoJS from 'crypto-js';
+export const encryptData = async (message) => {
+  if (!message || !process.env.NEXT_PUBLIC_ENCRYPTION_KEY) return null;
 
-const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
-
-export const decryptData = (message) => {
-  if (!message || !ENCRYPTION_KEY) return null;
-
-  try {
-    const decryptedMessage = CryptoJS.AES.decrypt(decodeURIComponent(message), ENCRYPTION_KEY);
-
-    const dataMessage = decryptedMessage.toString(CryptoJS.enc.Utf8);
-    return JSON.parse(dataMessage);
-  } catch (error) {
-    console.error('Decryption error:', error);
-    return null;
-  }
+  const CryptoJS = (await import("crypto-js")).default; // dynamic import to prevent deployment issues
+  return encodeURIComponent(
+    CryptoJS.AES.encrypt(JSON.stringify(message), process.env.NEXT_PUBLIC_ENCRYPTION_KEY).toString()
+  );
 };
 
-export const encryptData = (message) => {
-  if (!message || !ENCRYPTION_KEY) return null;
+export const decryptData = async (message) => {
+  if (!message || !process.env.NEXT_PUBLIC_ENCRYPTION_KEY) return null;
 
-  const encryptedMessage = CryptoJS.AES.encrypt(JSON.stringify(message), ENCRYPTION_KEY).toString();
-
-  return encodeURIComponent(encryptedMessage);
+  const CryptoJS = (await import("crypto-js")).default;
+  const decryptedMessage = CryptoJS.AES.decrypt(decodeURIComponent(message), process.env.NEXT_PUBLIC_ENCRYPTION_KEY);
+  return JSON.parse(decryptedMessage.toString(CryptoJS.enc.Utf8));
 };
