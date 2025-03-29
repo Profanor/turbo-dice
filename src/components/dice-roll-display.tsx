@@ -1,9 +1,13 @@
-'use client';
+"use client";
 
-import type { FC } from 'react';
-import { Card } from '@/components/ui/card';
-// import { useGameSocket } from '@/app/socketService';
-import { motion, AnimatePresence } from 'framer-motion';
+import type { FC } from "react";
+import { Card } from "@/components/ui/card";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+
+const bg = "/assets/images/desktop.png"; // desktop image
+const mobile = "/assets/images/mobile.png"; // mobile image
 
 interface DiceRollDisplayProps {
   rolling: boolean;
@@ -11,9 +15,35 @@ interface DiceRollDisplayProps {
 }
 
 export const DiceRollDisplay: FC<DiceRollDisplayProps> = ({ rolling, result }) => {
+  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const updateBackground = () => {
+      const newBg = window.innerWidth < 768 ? mobile : bg;
+      setBackgroundImage(newBg);
+    };
+
+    updateBackground();
+    window.addEventListener("resize", updateBackground);
+    return () => window.removeEventListener("resize", updateBackground);
+  }, []);
+
+  if (!backgroundImage) return null; // prevents rendering before background is set
+
   return (
-    <Card className="relative w-full h-[250px] sm:h-[400px] md:h-[450px] lg:h-[500px] bg-black backdrop-blur-sm rounded-lg border-2 border-sky-500/30 shadow-lg shadow-sky-500/10">
-      <div className="flex flex-col items-center justify-center h-full">
+    <Card className="relative w-full h-[250px] sm:h-[400px] md:h-[450px] lg:h-[500px] bg-[#1E1E1E] backdrop-blur-sm rounded-lg border-1 border-[#00A6F44D] overflow-hidden">
+      {/* background image */}
+      <Image
+        key={backgroundImage}
+        src={backgroundImage}
+        alt="Background Image"
+        fill
+        className="object-cover"
+        priority
+      />
+
+      {/* content */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center h-full z-10">
         <AnimatePresence mode="wait">
           {rolling ? (
             <motion.div
@@ -42,7 +72,7 @@ export const DiceRollDisplay: FC<DiceRollDisplayProps> = ({ rolling, result }) =
               </motion.span>
             </motion.div>
           ) : (
-            <span className="text-lg sm:text-2xl md:text-3xl text-gray-400 font-semibold text-center px-4">
+            <span className="text-sm sm:text-2xl md:text-3xl text-gray-400 font-semibold text-center px-4">
               Place your bet & roll!
             </span>
           )}

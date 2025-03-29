@@ -1,124 +1,115 @@
-'use client'
+"use client"
 
-import { DollarSign, HelpCircle, Clock, MessageCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { useGameSocket } from '@/app/socketService';
-import { motion } from 'framer-motion';
-import { decryptData } from '@/lib/crypto-utils';
-import UserDropdown from './user-dropdown';
+import type React from "react"
 
-const user = '/assets/images/user.jpeg';
+import { DollarSign, HelpCircle } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useGameSocket } from "@/app/socketService"
+import { motion } from "framer-motion"
+import { decryptData } from "@/lib/crypto-utils"
+import UserDropdown from "./user-dropdown"
+import Image from "next/image"
+
+const user = "/assets/images/turbo_avatar.svg";
+const howToPlay = "/assets/images/how_to_play.svg";
+const chat = "/assets/images/bubble_chat.svg";
 
 interface GameHeaderProps {
-  initialBalance: number;
-  timer: number;
-  formatTime: (time: number) => string;
+  initialBalance: number
 }
 
-const GameHeader: React.FC<GameHeaderProps> = ({ initialBalance, timer, formatTime }) => {
+const GameHeader: React.FC<GameHeaderProps> = ({ initialBalance }) => {
+  const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || ""
+  const cesload = process.env.NEXT_PUBLIC_HASH || ""
+  const { isConnected, emitEvent, onEvent } = useGameSocket(clientId, cesload)
 
-  const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || '';
-  const cesload = process.env.NEXT_PUBLIC_HASH || '';
-  const { isConnected, emitEvent, onEvent } = useGameSocket(clientId, cesload,);
-
-  const [balance, setBalance] = useState(initialBalance);
+  const [balance, setBalance] = useState(initialBalance)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    console.log('GameHeader Mounted');
-    console.log('WebSocket Connection Status:', isConnected);
+    console.log("GameHeader Mounted")
+    console.log("WebSocket Connection Status:", isConnected)
 
-    onEvent('get_user_balance', async (encryptedData: string) => {
+    // check if mobile on mount and when window resizes
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640)
+    }
+
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+
+    onEvent("get_user_balance", async (encryptedData: string) => {
       try {
-        const decrypted = await decryptData(encryptedData);
+        const decrypted = await decryptData(encryptedData)
 
         if (decrypted && decrypted.balance !== undefined) {
-          setBalance(decrypted.balance);
-          console.log('Balance', decrypted.balance);
+          setBalance(decrypted.balance)
+          console.log("Balance", decrypted.balance)
         } else {
-          console.error('Decryption failed or invalid balance data');
+          console.error("Decryption failed or invalid balance data")
         }
       } catch (error) {
-        console.error('Error decrypting data:', error);
+        console.error("Error decrypting data:", error)
       }
-    });
-  }, [isConnected, emitEvent, onEvent]);
+    })
+
+    return () => {
+      window.removeEventListener("resize", checkMobile)
+    }
+  }, [isConnected, emitEvent, onEvent])
 
   return (
-    <div className="w-full bg-gray-800/80 backdrop-blur-sm shadow-lg shadow-sky-500/10 py-3 px-4 sm:px-6 mb-6">
+    <div className="w-full bg-gray-800/80 py-3 px-4 sm:px-6 mb-6">
       <div className="max-w-7xl mx-auto">
-        {/* Mobile header layout */}
-        <div className="flex flex-col sm:hidden gap-3">
-          <div className="flex justify-between items-center">
-            <div className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-white">
+        <div className="flex justify-between items-center">
+          {/* Turbo Dice + How to Play */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="text-lg sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-white whitespace-nowrap">
               Turbo Dice
             </div>
-            <div className="flex items-center text-md font-semibold text-green-500">
-              <DollarSign className="w-4 h-4 mr-1" />
-              <span className="animate-pulse">{balance} USD</span>
-            </div>
-          </div>
-          <div className="flex justify-between items-center">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-medium px-4 py-1.5 rounded-full cursor-pointer flex items-center gap-1"
-            >
-              <HelpCircle className="h-3 w-3" />
-              <span>How to play?</span>
-            </motion.div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1 bg-gray-700/50 px-2 py-1 rounded-full">
-                <Clock className="h-3 w-3 text-sky-400" />
-                <span className={`text-sm font-medium ${timer <= 5 ? 'text-red-500 animate-pulse' : 'text-sky-400'}`}>
-                  {formatTime(timer)}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div>
-                  <UserDropdown userImage={user} />
-                </div>
-                <div className="bg-sky-500/20 p-1 rounded-full cursor-pointer hover:bg-sky-500/30 transition-colors">
-                  <MessageCircle className="h-4 w-4 text-sky-400" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Desktop header layout */}
-        <div className="hidden sm:flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-white">
-              Turbo Dice
-            </div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-medium px-4 py-1.5 rounded-full cursor-pointer flex items-center gap-1"
-            >
-              <HelpCircle className="h-3 w-3" />
-              <span>How to play?</span>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="cursor-pointer">
+              {isMobile ? (
+                <div className="flex items-center gap-1">
+                  <Image
+                    src={howToPlay || "/placeholder.svg"}
+                    alt="How to play"
+                    width={24}
+                    height={24}
+                    className="w-5 h-5 sm:w-6 sm:h-6"
+                  />
+                  <span className="text-xs text-white font-medium hidden xs:inline">How to play?</span>
+                </div>
+              ) : (
+                <div className="bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-medium px-2 sm:px-4 py-1.5 rounded-full flex items-center gap-1">
+                  <HelpCircle className="h-3 w-3" />
+                  <span>How to play?</span>
+                </div>
+              )}
             </motion.div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center text-md font-semibold text-green-500">
-              <DollarSign className="w-4 h-4 mr-1" />
+
+          {/* Balance + User + Message */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center text-sm sm:text-md font-semibold text-green-500 whitespace-nowrap">
+              <DollarSign className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
               <span className="animate-pulse">{balance} USD</span>
             </div>
-            <div className="h-5 w-[1px] bg-gray-600"></div>
-            <div className="flex items-center gap-2">
-              <div>
-                <UserDropdown userImage={user} />
-              </div>
-              <div className="bg-sky-500/20 p-1 rounded-full cursor-pointer hover:bg-sky-500/30 transition-colors">
-                <MessageCircle className="h-4 w-4 text-sky-400" />
+
+            <div className="h-4 w-[1px] bg-gray-600 hidden xs:block"></div>
+
+            <div className="flex items-center gap-1 sm:gap-2">
+              <UserDropdown userImage={user} />
+
+              <div className="cursor-pointer">
+                <Image src={chat} alt="chat bubble" width={24} height={24} />
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default GameHeader;
+export default GameHeader

@@ -81,27 +81,27 @@ export default function Leaderboard({
   return (
     <Card className="w-full flex flex-col bg-gray-800/80 backdrop-blur-sm rounded-lg border-2 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4 min-h-[700px]">
       {/* Tab Navigation */}
-      <div className="bg-gray-800/80 backdrop-blur-sm rounded-full border-2 border-sky-500/30 shadow-lg shadow-sky-500/10 p-1 flex mb-4">
+      <div className="bg-[#1E1E1E] backdrop-blur-sm rounded-full border-1 border-sky-500/30 p-1 flex mb-4">
         <button
           onClick={() => setActiveTab('leaderboard')}
-          className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
-            activeTab === 'leaderboard' ? 'bg-black text-sky-400' : 'text-gray-400 hover:text-gray-300'
+          className={`cursor-pointer flex-1 py-2 text-sm font-medium rounded-full transition-all ${
+            activeTab === 'leaderboard' ? 'bg-[#005574] text-white' : 'text-gray-400 hover:text-gray-300'
           }`}
         >
           Leaderboard
         </button>
         <button
           onClick={() => setActiveTab('mybets')}
-          className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
-            activeTab === 'mybets' ? 'bg-black text-sky-400' : 'text-gray-400 hover:text-gray-300'
+          className={`cursor-pointer flex-1 py-2 text-sm font-medium rounded-full transition-all ${
+            activeTab === 'mybets' ? 'bg-[#005574] text-white' : 'text-gray-400 hover:text-gray-300'
           }`}
         >
           My Bets
         </button>
         <button
           onClick={() => setActiveTab('top')}
-          className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
-            activeTab === 'top' ? 'bg-black text-sky-400' : 'text-gray-400 hover:text-gray-300'
+          className={`cursor-pointer flex-1 py-2 text-sm font-medium rounded-full transition-all ${
+            activeTab === 'top' ? 'bg-[#005574] text-white' : 'text-gray-400 hover:text-gray-300'
           }`}
         >
           Top

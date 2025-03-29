@@ -95,7 +95,7 @@ const scrollBets = (direction: 'left' | 'right') => {
     <Card className="w-full sm:w-3/4 bg-gray-800/80 backdrop-blur-sm rounded-lg border-2 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4">
       <div className="flex flex-col">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-          <span className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-white">
+          <span className="text-xs font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-white">
             Select Bet Amount
           </span>
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">
@@ -105,7 +105,7 @@ const scrollBets = (direction: 'left' | 'right') => {
                 onClick={() => setAutoBet(!autoBet)}
                 type="button"
                 title="Auto Bet"
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-500 ${
+                className={`relative inline-flex h-6 w-10 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-500 ${
                   autoBet ? 'bg-sky-500' : 'bg-gray-600'
                 }`}
               >
@@ -113,7 +113,6 @@ const scrollBets = (direction: 'left' | 'right') => {
                   className={`${autoBet ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                 />
               </button>
-              <label className="text-xs text-gray-200">{autoBet ? 'On' : 'Off'}</label>
             </div>
             <div className="flex items-center gap-2">
               <label htmlFor="autoBetRounds" className="text-xs text-gray-300">

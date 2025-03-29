@@ -98,16 +98,16 @@ export default function DiceBetGame() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-black text-white flex flex-col items-start">
+    <div className="min-h-screen w-full bg-[#1E1E1E] text-white flex flex-col items-start">
       {/* Header */}
-      <GameHeader initialBalance={0} timer={timer} formatTime={formatTime} />
+      <GameHeader initialBalance={0} />
 
       <div className="w-full max-w-7xl px-4 sm:px-6 mx-auto">
-        <div className="flex flex-col lg:flex-row gap-6">
-          <div className="w-full lg:w-2/3 flex flex-col gap-6">
+        <div className="flex flex-col lg:flex-row gap-2">
+          <div className="w-full lg:w-2/3 flex flex-col gap-4">
             <RecentResultsDisplay recentResults={recentResults} />
             <DiceRollDisplay rolling={rolling} result={result} />
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-2">
               <BetContainer
                 selectedBet={selectedBet}
                 setSelectedBet={setSelectedBet}
