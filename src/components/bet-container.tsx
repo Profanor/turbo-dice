@@ -95,13 +95,13 @@ const BetContainer: FC<BetContainerProps> = ({
   return (
     <Card className="w-full sm:w-3/4 bg-gray-800/80 backdrop-blur-sm rounded-lg border-1 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4">
       <div className="flex flex-col">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-          <span className="text-xs font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-white">
+        <div className="flex flex-row items-center justify-between gap-3 mb-4 w-full">
+          <span className="text-[10px] sm:text-xs font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-white">
             Select Bet Amount
           </span>
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+          <div className="flex flex-nowrap items-center gap-2 sm:gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-gray-300">Auto Bet:</span>
+              <span className="text-xs font-semibold text-gray-300">Auto Bet</span>
               <button
                 onClick={() => setAutoBet(!autoBet)}
                 type="button"
@@ -125,7 +125,7 @@ const BetContainer: FC<BetContainerProps> = ({
                 min={1}
                 value={autoBetRounds}
                 onChange={(e) => setAutoBetRounds(Number(e.target.value))}
-                className="bg-amber-50 w-12 p-1 text-xs text-black rounded border border-sky-400/50 focus:outline-none focus:ring-1 focus:ring-sky-400"
+                className="bg-amber-50 w-10 p-1 text-xs text-black rounded border border-sky-400/50 focus:outline-none focus:ring-1 focus:ring-sky-400"
               />
             </div>
           </div>
