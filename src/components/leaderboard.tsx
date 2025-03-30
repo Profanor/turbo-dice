@@ -67,7 +67,7 @@ export const TabContent: React.FC<TabContentProps> = ({
               <div
                 className={`font-bold ${
                   entry.status === 'win'
-                    ? 'text-green-500'
+                    ? 'text-white'
                     : entry.status === 'loss'
                       ? 'text-red-500'
                       : 'text-yellow-400'

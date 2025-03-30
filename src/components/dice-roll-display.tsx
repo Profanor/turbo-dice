@@ -15,7 +15,8 @@ interface DiceRollDisplayProps {
 }
 
 export const DiceRollDisplay: FC<DiceRollDisplayProps> = ({ rolling, result }) => {
-  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+  const [backgroundImage, setBackgroundImage] = useState<string>(bg);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     const updateBackground = () => {
@@ -23,26 +24,33 @@ export const DiceRollDisplay: FC<DiceRollDisplayProps> = ({ rolling, result }) =
       setBackgroundImage(newBg);
     };
 
+    // preload the images
+    const img = new window.Image();
+    img.src = bg;
+    img.onload = () => setImageLoaded(true);
+
     updateBackground();
     window.addEventListener("resize", updateBackground);
     return () => window.removeEventListener("resize", updateBackground);
   }, []);
 
-  if (!backgroundImage) return null; // prevents rendering before background is set
-
   return (
     <Card className="relative w-full h-[250px] sm:h-[400px] md:h-[450px] lg:h-[500px] bg-[#1E1E1E] backdrop-blur-sm rounded-lg border-1 border-[#00A6F44D] overflow-hidden">
-      {/* background image */}
+      {/* Background Image */}
       <Image
         key={backgroundImage}
         src={backgroundImage}
         alt="Background Image"
         fill
-        className="object-cover"
+        className="object-cover transition-opacity duration-500"
         priority
+        placeholder="empty"
+        onLoad={() => setImageLoaded(true)}
+        style={{ opacity: imageLoaded ? 1 : 0 }}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 50vw" 
       />
 
-      {/* content */}
+      {/* Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center h-full z-10">
         <AnimatePresence mode="wait">
           {rolling ? (
