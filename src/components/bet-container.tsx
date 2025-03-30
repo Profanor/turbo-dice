@@ -1,25 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-'use client'
 
-import { FC, useEffect, useRef } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useGameSocket } from '@/app/socketService';
-import { decryptData, encryptData } from '@/lib/crypto-utils';
+"use client"
+
+import { type FC, useEffect, useRef } from "react"
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { motion } from "framer-motion"
+import { useGameSocket } from "@/app/socketService"
+import { decryptData, encryptData } from "@/lib/crypto-utils"
 
 interface BetContainerProps {
-  autoBet: boolean;
-  setAutoBet: (value: boolean) => void;
-  autoBetRounds: number;
-  setAutoBetRounds: (value: number) => void;
-  betAmounts: number[];
-  selectedBet: number | null;
-  setSelectedBet: (value: number) => void;
-  scrollBets: (direction: 'left' | 'right') => void;
-  rollDice: () => void;
-  rolling: boolean;
+  autoBet: boolean
+  setAutoBet: (value: boolean) => void
+  autoBetRounds: number
+  setAutoBetRounds: (value: number) => void
+  betAmounts: number[]
+  selectedBet: number | null
+  setSelectedBet: (value: number) => void
+  scrollBets: (direction: "left" | "right") => void
+  rollDice: () => void
+  rolling: boolean
 }
 
 const BetContainer: FC<BetContainerProps> = ({
@@ -33,63 +33,64 @@ const BetContainer: FC<BetContainerProps> = ({
   rollDice,
   rolling,
 }) => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || '';
-  const cesload = process.env.NEXT_PUBLIC_HASH || '';
-  const { isConnected, emitEvent, onEvent } = useGameSocket(clientId, cesload);
+  const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || ""
+  const cesload = process.env.NEXT_PUBLIC_HASH || ""
+  const { isConnected, emitEvent, onEvent } = useGameSocket(clientId, cesload)
 
   const handleRollDice = () => {
-  if (!selectedBet || !isConnected) return;
+    if (!selectedBet || !isConnected) return
 
-  const payload = {
-    stakeAmount: selectedBet,
-    instantTournamentId: 630,
-  };
+    const payload = {
+      stakeAmount: selectedBet,
+      instantTournamentId: 630,
+    }
 
-  const encryptedPayload = encryptData(payload);
-  if (encryptedPayload) {
-    encryptedPayload
-      .then((payload) => {
-        if (payload) {
-        emitEvent('play_instant_tournament_game', payload);
-        rollDice();
-      } else {
-        console.error('Failed to encrypt payload');
-      }
-    })
-    .catch((error) => {
-      console.error('Encryption error:', error);
-    });
-  } else {
-    console.error('Failed to encrypt payload');
+    const encryptedPayload = encryptData(payload)
+    if (encryptedPayload) {
+      encryptedPayload
+        .then((payload) => {
+          if (payload) {
+            emitEvent("play_instant_tournament_game", payload)
+            rollDice()
+          } else {
+            console.error("Failed to encrypt payload")
+          }
+        })
+        .catch((error) => {
+          console.error("Encryption error:", error)
+        })
+    } else {
+      console.error("Failed to encrypt payload")
+    }
   }
-};
 
   useEffect(() => {
-    console.log('BetContainer Mounted');
-    console.log('WebSocket Connection Status:', isConnected);
+    console.log("BetContainer Mounted")
+    console.log("WebSocket Connection Status:", isConnected)
 
-  onEvent('played_instant_tournament_game', (encryptedData: string) => {
-    const decrypted = decryptData(encryptedData);
-    
-    if (decrypted) {
-      console.log('Game Result:', decrypted);
-    } else {
-      console.error('Decryption failed: received malformed data');
-    }
-  });
-}, [isConnected, onEvent]);
+    onEvent("played_instant_tournament_game", (encryptedData: string) => {
+      const decrypted = decryptData(encryptedData)
 
-const scrollBets = (direction: 'left' | 'right') => {
-    if (scrollContainerRef.current) {
-      const scrollAmount = 200 * (direction === 'left' ? -1 : 1);
-      scrollContainerRef.current.scrollTo({
-        left: scrollContainerRef.current.scrollLeft + scrollAmount,
-        behavior: 'smooth',
-      });
-    }
-  };
+      if (decrypted) {
+        console.log("Game Result:", decrypted)
+      } else {
+        console.error("Decryption failed: received malformed data")
+      }
+    })
+  }, [isConnected, onEvent])
+
+  const scrollBets = (direction: "left" | "right") => {
+    if (!scrollContainerRef.current) return
+
+    const scrollAmount = scrollContainerRef.current.clientWidth * 0.5 * (direction === "left" ? -1 : 1)
+
+    scrollContainerRef.current.scrollBy({
+      left: scrollAmount,
+      behavior: "smooth",
+    })
+  }
 
   return (
     <Card className="w-full sm:w-3/4 bg-gray-800/80 backdrop-blur-sm rounded-lg border-2 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4">
@@ -106,11 +107,11 @@ const scrollBets = (direction: 'left' | 'right') => {
                 type="button"
                 title="Auto Bet"
                 className={`relative inline-flex h-6 w-10 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-500 ${
-                  autoBet ? 'bg-sky-500' : 'bg-gray-600'
+                  autoBet ? "bg-sky-500" : "bg-gray-600"
                 }`}
               >
                 <span
-                  className={`${autoBet ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                  className={`${autoBet ? "translate-x-6" : "translate-x-1"} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                 />
               </button>
             </div>
@@ -129,30 +130,35 @@ const scrollBets = (direction: 'left' | 'right') => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-2">
-          <div className="relative w-full flex-1 overflow-hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-transparent text-sky-400 hover:bg-gray-800/30"
-              onClick={() => scrollBets('left')}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
+
+        {/* betting controls */}
+        <div className="flex items-center gap-3 sm:gap-4">
+          {/* left chevron outside the scroll area */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="flex-shrink-0 bg-gray-800/50 text-sky-400 hover:bg-gray-800/70 z-10"
+            onClick={() => scrollBets("left")}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+
+          {/* scrollable bet amounts container */}
+          <div className="relative flex-1 overflow-hidden">
             <div
               ref={scrollContainerRef}
-              className="flex space-x-2 pb-2 px-8 overflow-x-auto scrollbar-hide"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              className="flex space-x-2 pb-2 overflow-x-auto scrollbar-hide"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
               {betAmounts.map((amount) => (
                 <motion.div key={amount} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
-                    variant={selectedBet === amount ? 'default' : 'outline'}
+                    variant={selectedBet === amount ? "default" : "outline"}
                     onClick={() => setSelectedBet(amount)}
                     className={`px-3 py-2 text-sm transition-all flex-shrink-0 ${
                       selectedBet === amount
-                        ? 'bg-sky-600 text-white border border-sky-500'
-                        : 'bg-gray-800 text-gray-400 hover:bg-gray-700 opacity-40 hover:opacity-70'
+                        ? "bg-sky-600 text-white border border-sky-500"
+                        : "bg-gray-800 text-gray-400 hover:bg-gray-700 opacity-40 hover:opacity-70"
                     }`}
                   >
                     {amount}
@@ -160,29 +166,33 @@ const scrollBets = (direction: 'left' | 'right') => {
                 </motion.div>
               ))}
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800/50 text-sky-400 hover:bg-gray-800/70"
-              onClick={() => scrollBets('right')}
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
           </div>
-          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full sm:w-auto sm:ml-2">
+
+          {/* right chevron outside the scroll area */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="flex-shrink-0 bg-gray-800/50 text-sky-400 hover:bg-gray-800/70 z-10"
+            onClick={() => scrollBets("right")}
+            aria-label="Scroll right"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+
+          {/* bet & roll button */}
+          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="hidden sm:block flex-shrink-0">
             <Button
               onClick={handleRollDice}
               disabled={!selectedBet || rolling}
               className="w-full sm:w-auto py-2 px-4 text-sm bg-gradient-to-r from-sky-400 to-white hover:from-sky-500 hover:to-sky-100 text-black font-bold transition-all duration-300"
             >
-              {rolling ? 'Rolling...' : 'Bet & Roll'}
+              {rolling ? "Rolling..." : "Bet & Roll"}
             </Button>
           </motion.div>
         </div>
       </div>
     </Card>
-  );
-};
+  )
+}
 
-export default BetContainer;
+export default BetContainer

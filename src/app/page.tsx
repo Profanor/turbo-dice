@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { FloatingTimer } from '@/components/floating-timer';
+// import { FloatingTimer } from '@/components/floating-timer';
 import { TimerContainer } from '@/components/game-timer';
 import { DiceRollDisplay } from '@/components/dice-roll-display';
 import { LeaderboardTab, MyBetsSubTab, TopSubTab } from '@/components/tab-content';
@@ -13,6 +13,7 @@ import BetContainer from '@/components/bet-container';
 import Leaderboard from '@/components/tab-content';
 import GameHeader from '@/components/game-header';
 import RecentResultsDisplay from '@/components/recent-results-display';
+// import BetButtonContainer from '@/components/bet-roll-button-container';
 
 const betAmounts = [50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000];
 
@@ -142,7 +143,7 @@ export default function DiceBetGame() {
         </div>
       </div>
 
-      <FloatingTimer timer={timer} formatTime={formatTime} />
+      {/* <FloatingTimer timer={timer} formatTime={formatTime} /> */}
     </div>
   );
 }
