@@ -8,6 +8,8 @@ export type LeaderboardTab = 'leaderboard' | 'mybets' | 'top';
 export type MyBetsSubTab = 'ongoing' | 'ended';
 export type TopSubTab = 'day' | 'month' | 'year';
 
+// const logo = '/assets/images/sv-logo.svg';
+
 type LeaderboardItem = {
   name: string;
   score: number;
@@ -79,9 +81,9 @@ export default function Leaderboard({
   );
 
   return (
-    <Card className="w-full flex flex-col bg-gray-800/80 backdrop-blur-sm rounded-lg border-2 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4 min-h-[700px]">
+    <Card className="w-full flex flex-col bg-gray-800/80 backdrop-blur-sm rounded-lg border-1 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4 min-h-[665px] mb-2">
       {/* Tab Navigation */}
-      <div className="bg-[#1E1E1E] backdrop-blur-sm rounded-full border-1 border-sky-500/30 p-1 flex mb-4">
+      <div className="bg-[#1E1E1E] backdrop-blur-sm rounded-full border-1 border-sky-500/30 p-1 flex mb-2">
         <button
           onClick={() => setActiveTab('leaderboard')}
           className={`cursor-pointer flex-1 py-2 text-sm font-medium rounded-full transition-all ${

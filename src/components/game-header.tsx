@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { DollarSign, HelpCircle } from "lucide-react"
+import { HelpCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useGameSocket } from "@/app/socketService"
 import { motion } from "framer-motion"
@@ -92,12 +91,9 @@ const GameHeader: React.FC<GameHeaderProps> = ({ initialBalance }) => {
           {/* Balance + User + Message */}
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex items-center text-sm sm:text-md font-semibold text-green-500 whitespace-nowrap">
-              <DollarSign className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
-              <span className="animate-pulse">{balance} USD</span>
+              <span className="animate-pulse">{balance.toLocaleString()} USD</span>
             </div>
-
             <div className="h-4 w-[1px] bg-gray-600 hidden xs:block"></div>
-
             <div className="flex items-center gap-1 sm:gap-2">
               <UserDropdown userImage={user} />
 

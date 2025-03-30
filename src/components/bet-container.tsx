@@ -93,7 +93,7 @@ const BetContainer: FC<BetContainerProps> = ({
   }
 
   return (
-    <Card className="w-full sm:w-3/4 bg-gray-800/80 backdrop-blur-sm rounded-lg border-2 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4">
+    <Card className="w-full sm:w-3/4 bg-gray-800/80 backdrop-blur-sm rounded-lg border-1 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4">
       <div className="flex flex-col">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
           <span className="text-xs font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-white">
