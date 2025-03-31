@@ -14,8 +14,7 @@ import Leaderboard from "@/components/tab-content"
 import GameHeader from "@/components/game-header"
 import RecentResultsDisplay from "@/components/recent-results-display"
 import BetButtonContainer from "@/components/bet-roll-button-container"
-
-const betAmounts = [50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000]
+import { useGameSocket } from "./socketService"
 
 export default function DiceBetGame() {
   const [selectedBet, setSelectedBet] = useState<number | null>(null)
@@ -36,6 +35,11 @@ export default function DiceBetGame() {
   const [myBetsSubTab, setMyBetsSubTab] = useState<MyBetsSubTab>("ongoing")
   const [topSubTab, setTopSubTab] = useState<TopSubTab>("day")
 
+  const { activeGames } = useGameSocket();
+  const betAmounts = Array.isArray(activeGames)
+  ? [...new Set(activeGames.map((game) => game.stake))].sort((a, b) => a - b) : []; // bet amounts
+  console.log('Bet amounts:', betAmounts);
+  
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   const endGame = () => {

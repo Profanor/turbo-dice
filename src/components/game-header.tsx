@@ -5,7 +5,6 @@ import { HelpCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useGameSocket } from "@/app/socketService"
 import { motion } from "framer-motion"
-import { decryptData } from "@/lib/crypto-utils"
 import UserDropdown from "./user-dropdown"
 import Image from "next/image"
 
@@ -17,12 +16,8 @@ interface GameHeaderProps {
   initialBalance: number
 }
 
-const GameHeader: React.FC<GameHeaderProps> = ({ initialBalance }) => {
-  const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || ""
-  const cesload = process.env.NEXT_PUBLIC_HASH || ""
-  const { isConnected, emitEvent, onEvent } = useGameSocket(clientId, cesload)
-
-  const [balance, setBalance] = useState(initialBalance)
+const GameHeader: React.FC<GameHeaderProps> = () => {
+  const { isConnected, balance, currency } = useGameSocket()
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -37,25 +32,10 @@ const GameHeader: React.FC<GameHeaderProps> = ({ initialBalance }) => {
     checkMobile()
     window.addEventListener("resize", checkMobile)
 
-    onEvent("get_user_balance", async (encryptedData: string) => {
-      try {
-        const decrypted = await decryptData(encryptedData)
-
-        if (decrypted && decrypted.balance !== undefined) {
-          setBalance(decrypted.balance)
-          console.log("Balance", decrypted.balance)
-        } else {
-          console.error("Decryption failed or invalid balance data")
-        }
-      } catch (error) {
-        console.error("Error decrypting data:", error)
-      }
-    })
-
     return () => {
       window.removeEventListener("resize", checkMobile)
     }
-  }, [isConnected, emitEvent, onEvent])
+  }, [isConnected])
 
   return (
     <div className="w-full bg-gray-800/80 py-3 px-4 sm:px-6 mb-6">
@@ -91,7 +71,7 @@ const GameHeader: React.FC<GameHeaderProps> = ({ initialBalance }) => {
           {/* Balance + User + Message */}
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex items-center text-sm sm:text-md font-semibold text-green-500 whitespace-nowrap">
-              <span className="animate-pulse">{balance.toLocaleString()} USD</span>
+              <span className="animate-pulse">{balance.toLocaleString()} {currency}</span>              
             </div>
             <div className="h-4 w-[1px] bg-gray-600 hidden xs:block"></div>
             <div className="flex items-center gap-1 sm:gap-2">

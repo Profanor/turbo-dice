@@ -1,13 +1,11 @@
 
 "use client"
 
-import { type FC, useEffect, useRef } from "react"
+import { type FC, useRef } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { motion } from "framer-motion"
-import { useGameSocket } from "@/app/socketService"
-import { decryptData, encryptData } from "@/lib/crypto-utils"
 
 interface BetContainerProps {
   autoBet: boolean
@@ -35,51 +33,10 @@ const BetContainer: FC<BetContainerProps> = ({
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || ""
-  const cesload = process.env.NEXT_PUBLIC_HASH || ""
-  const { isConnected, emitEvent, onEvent } = useGameSocket(clientId, cesload)
-
   const handleRollDice = () => {
-    if (!selectedBet || !isConnected) return
-
-    const payload = {
-      stakeAmount: selectedBet,
-      instantTournamentId: 630,
-    }
-
-    const encryptedPayload = encryptData(payload)
-    if (encryptedPayload) {
-      encryptedPayload
-        .then((payload) => {
-          if (payload) {
-            emitEvent("play_instant_tournament_game", payload)
-            rollDice()
-          } else {
-            console.error("Failed to encrypt payload")
-          }
-        })
-        .catch((error) => {
-          console.error("Encryption error:", error)
-        })
-    } else {
-      console.error("Failed to encrypt payload")
-    }
+   console.log('Rolling dice') 
+   rollDice()
   }
-
-  useEffect(() => {
-    console.log("BetContainer Mounted")
-    console.log("WebSocket Connection Status:", isConnected)
-
-    onEvent("played_instant_tournament_game", (encryptedData: string) => {
-      const decrypted = decryptData(encryptedData)
-
-      if (decrypted) {
-        console.log("Game Result:", decrypted)
-      } else {
-        console.error("Decryption failed: received malformed data")
-      }
-    })
-  }, [isConnected, onEvent])
 
   const scrollBets = (direction: "left" | "right") => {
     if (!scrollContainerRef.current) return
