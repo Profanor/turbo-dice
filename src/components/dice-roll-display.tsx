@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 const bg = "/assets/images/desktop.png"; // desktop image
-const mobile = "/assets/images/mobile.png"; // mobile image
+const mobile = "/assets/images/stadium_bg.png"; // mobile image
 
 interface DiceRollDisplayProps {
   rolling: boolean;
