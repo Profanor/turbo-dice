@@ -1,22 +1,29 @@
-import { motion } from 'framer-motion';
-import { CheckCircle, XCircle, Trophy } from 'lucide-react';
-import { Dispatch, SetStateAction } from 'react';
+"use client"
 
-type MyBetsSubTab = 'ongoing' | 'ended';
-type TopSubTab = 'day' | 'month' | 'year';
+import type React from "react"
+
+import { motion } from "framer-motion"
+import { CheckCircle, XCircle, Trophy } from "lucide-react"
+import type { Dispatch, SetStateAction } from "react"
+import Image from "next/image"
+
+type MyBetsSubTab = "ongoing" | "ended"
+type TopSubTab = "day" | "month" | "year"
+
+const user = "/assets/images/turbo_avatar.svg"
 
 interface TabContentProps {
-  activeTab: string;
-  ongoingBets: Array<{ id: string; score: number; currentWin: number }>;
-  endedBets: Array<{ id: string; betAmount: number; status: string }>;
+  activeTab: string
+  ongoingBets: Array<{ id: string; score: number; currentWin: number }>
+  endedBets: Array<{ id: string; betAmount: number; status: string }>
   topPlayers: {
-    [key: string]: Array<{ date: string; avatar: string; betAmount: number; winAmount: number; round: number }>;
-  };
-  myBetsSubTab: string;
-  topSubTab: string;
-  setMyBetsSubTab: Dispatch<SetStateAction<MyBetsSubTab>>;
-  setTopSubTab: Dispatch<SetStateAction<TopSubTab>>;
-  leaderboard: Array<{ name: string; score: number; status: string }>;
+    [key: string]: Array<{ date: string; avatar: string; betAmount: number; winAmount: number; round: number }>
+  }
+  myBetsSubTab: string
+  topSubTab: string
+  setMyBetsSubTab: Dispatch<SetStateAction<MyBetsSubTab>>
+  setTopSubTab: Dispatch<SetStateAction<TopSubTab>>
+  leaderboard: Array<{ name: string; score: number; status: string }>
 }
 
 export const TabContent: React.FC<TabContentProps> = ({
@@ -32,7 +39,7 @@ export const TabContent: React.FC<TabContentProps> = ({
 }) => {
   // render the content based on the active tab
   switch (activeTab) {
-    case 'leaderboard':
+    case "leaderboard":
       return (
         <>
           {/* leaderboard header */}
@@ -48,29 +55,28 @@ export const TabContent: React.FC<TabContentProps> = ({
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className={`grid grid-cols-3 gap-2 py-2 px-3 mb-2 rounded-md ${
-                entry.status === 'win'
-                  ? 'bg-green-500/20 border border-green-500/50'
-                  : entry.status === 'loss'
-                    ? 'bg-red-500/20 border border-red-500/50'
+              className={`grid grid-cols-3 gap-2 py-2 px-3 mb-2 rounded-md bg-gray-800/80 ${
+                entry.status === "win"
+                  ? "border border-green-500/50"
+                  : entry.status === "loss"
+                    ? "border border-red-500/50"
                     : index === 0
-                      ? 'bg-yellow-500/20 border border-yellow-500/50'
+                      ? "border border-yellow-500/50"
                       : index === 1
-                        ? 'bg-gray-400/20 border border-gray-400/50'
+                        ? "border border-gray-400/50"
                         : index === 2
-                          ? 'bg-amber-700/20 border border-amber-700/50'
-                          : 'bg-gray-700/50'
+                          ? "border border-amber-700/50"
+                          : ""
               }`}
             >
-              <div className="truncate">{entry.name}</div>
-              <div>{entry.score}</div>
+              <div className="truncate flex items-center text-gray-400 text-xs">
+                <Image src= {user || "/placeholder.svg"} alt="User" className="w-5 h-5 mr-2 rounded-full" width={12} height={12} />
+                {entry.name}
+              </div>
+              <div className="flex items-center text-gray-400 text-xs">{entry.score}</div> {/* score */}
               <div
                 className={`font-bold ${
-                  entry.status === 'win'
-                    ? 'text-white'
-                    : entry.status === 'loss'
-                      ? 'text-red-500'
-                      : 'text-yellow-400'
+                  entry.status === "win" ? "text-white" : entry.status === "loss" ? "text-red-500" : "text-yellow-400"
                 }`}
               >
                 {entry.score * 50}
@@ -82,39 +88,39 @@ export const TabContent: React.FC<TabContentProps> = ({
             <div className="text-gray-400 text-sm italic py-2 text-center">No players yet</div>
           )}
         </>
-      );
+      )
 
       {
         /* TAB MY BETS */
       }
-    case 'mybets':
+    case "mybets":
       return (
         <>
           {/* My Bets sub-tabs */}
           <div className="flex mb-4 border-b border-gray-700">
             <button
-              onClick={() => setMyBetsSubTab('ongoing')}
+              onClick={() => setMyBetsSubTab("ongoing")}
               className={`px-4 py-2 text-sm font-medium ${
-                myBetsSubTab === 'ongoing'
-                  ? 'text-sky-400 border-b-2 border-sky-400'
-                  : 'text-gray-400 hover:text-gray-300'
+                myBetsSubTab === "ongoing"
+                  ? "text-sky-400 border-b-2 border-sky-400"
+                  : "text-gray-400 hover:text-gray-300"
               }`}
             >
               Ongoing
             </button>
             <button
-              onClick={() => setMyBetsSubTab('ended')}
+              onClick={() => setMyBetsSubTab("ended")}
               className={`px-4 py-2 text-sm font-medium ${
-                myBetsSubTab === 'ended'
-                  ? 'text-sky-400 border-b-2 border-sky-400'
-                  : 'text-gray-400 hover:text-gray-300'
+                myBetsSubTab === "ended"
+                  ? "text-sky-400 border-b-2 border-sky-400"
+                  : "text-gray-400 hover:text-gray-300"
               }`}
             >
               Ended
             </button>
           </div>
 
-          {myBetsSubTab === 'ongoing' ? (
+          {myBetsSubTab === "ongoing" ? (
             <>
               {/* ongoing bets header */}
               <div className="grid grid-cols-3 gap-2 mb-2 text-xs text-gray-400 font-semibold border-b border-gray-700 pb-2">
@@ -157,22 +163,22 @@ export const TabContent: React.FC<TabContentProps> = ({
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                   className={`grid grid-cols-3 gap-2 py-2 px-3 mb-2 rounded-md ${
-                    bet.status === 'win'
-                      ? 'bg-green-500/20 border border-green-500/50'
-                      : 'bg-red-500/20 border border-red-500/50'
+                    bet.status === "win"
+                      ? "bg-green-500/20 border border-green-500/50"
+                      : "bg-red-500/20 border border-red-500/50"
                   }`}
                 >
                   <div className="text-xs font-medium">{bet.id}</div>
                   <div className="text-xs font-medium">{bet.betAmount}</div>
                   <div className="flex items-center">
-                    {bet.status === 'win' ? (
+                    {bet.status === "win" ? (
                       <>
-                        <CheckCircle className="h-3 w-3 text-green-500 mr-1" />{' '}
+                        <CheckCircle className="h-3 w-3 text-green-500 mr-1" />{" "}
                         <span className="text-green-500 text-xs font-medium">Win</span>
                       </>
                     ) : (
                       <>
-                        <XCircle className="h-3 w-3 text-red-500 mr-1" />{' '}
+                        <XCircle className="h-3 w-3 text-red-500 mr-1" />{" "}
                         <span className="text-red-500 text-xs font-medium">Loss</span>
                       </>
                     )}
@@ -186,33 +192,33 @@ export const TabContent: React.FC<TabContentProps> = ({
             </>
           )}
         </>
-      );
+      )
 
-    case 'top':
+    case "top":
       return (
         <>
           {/* top sub-tabs */}
           <div className="flex mb-6 border-b border-gray-700 space-x-4 md:space-x-8 justify-center">
             <button
-              onClick={() => setTopSubTab('day')}
+              onClick={() => setTopSubTab("day")}
               className={`px-3 md:px-6 py-2 text-sm font-medium ${
-                topSubTab === 'day' ? 'text-sky-400 border-b-2 border-sky-400' : 'text-gray-400 hover:text-gray-300'
+                topSubTab === "day" ? "text-sky-400 border-b-2 border-sky-400" : "text-gray-400 hover:text-gray-300"
               }`}
             >
               Day
             </button>
             <button
-              onClick={() => setTopSubTab('month')}
+              onClick={() => setTopSubTab("month")}
               className={`px-3 md:px-6 py-2 text-sm font-medium ${
-                topSubTab === 'month' ? 'text-sky-400 border-b-2 border-sky-400' : 'text-gray-400 hover:text-gray-300'
+                topSubTab === "month" ? "text-sky-400 border-b-2 border-sky-400" : "text-gray-400 hover:text-gray-300"
               }`}
             >
               Month
             </button>
             <button
-              onClick={() => setTopSubTab('year')}
+              onClick={() => setTopSubTab("year")}
               className={`px-3 md:px-6 py-2 text-sm font-medium ${
-                topSubTab === 'year' ? 'text-sky-400 border-b-2 border-sky-400' : 'text-gray-400 hover:text-gray-300'
+                topSubTab === "year" ? "text-sky-400 border-b-2 border-sky-400" : "text-gray-400 hover:text-gray-300"
               }`}
             >
               Year
@@ -258,6 +264,6 @@ export const TabContent: React.FC<TabContentProps> = ({
             <div className="text-gray-400 text-sm italic py-2 text-center">No top players yet</div>
           )}
         </>
-      );
+      )
   }
-};
+}
