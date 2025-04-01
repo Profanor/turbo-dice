@@ -6,7 +6,7 @@ type RecentResultsDisplayProps = {
 
 const RecentResultsDisplay: React.FC<RecentResultsDisplayProps> = ({ recentResults }) => {
   return (
-    <div className="flex items-center space-x-4 overflow-x-auto">
+    <div className="flex items-center space-x-4 overflow-x-hidden">
       {recentResults.length > 0 ? (
         recentResults.map((res, idx) => (
           <motion.div

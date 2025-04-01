@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Dice Aviator',
+  title: 'Turbo Dice',
   description: 'Powered by Smatvirtual',
 };

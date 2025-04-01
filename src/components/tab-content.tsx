@@ -113,7 +113,7 @@ export default function Leaderboard({
       {/* Players Count */}
       <PlayersCount count={leaderboard.length} />
 
-      {/* Tab Content */}
+      {/* LeaderBoardTab Content */}
       <div className="flex-1 min-h-0 overflow-y-auto">
         <div className="flex flex-col h-full justify-between">{renderTabContent()}</div>
       </div>
