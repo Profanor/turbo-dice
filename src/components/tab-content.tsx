@@ -111,7 +111,7 @@ export default function Leaderboard({
       </div>
 
       {/* Players Count */}
-      <PlayersCount count={leaderboard.length} />
+      <PlayersCount />
 
       {/* LeaderBoardTab Content */}
       <div className="flex-1 min-h-0 overflow-y-auto">
