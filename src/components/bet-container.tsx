@@ -1,23 +1,20 @@
+'use client';
 
-"use client"
-
-import { type FC, useRef } from "react"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { motion } from "framer-motion"
+import { type FC, useRef } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useGameSocket } from '@/app/socketService';
 
 interface BetContainerProps {
-  autoBet: boolean
-  setAutoBet: (value: boolean) => void
-  autoBetRounds: number
-  setAutoBetRounds: (value: number) => void
-  betAmounts: number[]
-  selectedBet: number | null
-  setSelectedBet: (value: number) => void
-  scrollBets: (direction: "left" | "right") => void
-  rollDice: () => void
-  rolling: boolean
+  autoBet: boolean;
+  setAutoBet: (value: boolean) => void;
+  autoBetRounds: number;
+  setAutoBetRounds: (value: number) => void;
+  scrollBets: (direction: 'left' | 'right') => void;
+  rollDice: () => void;
+  rolling: boolean;
 }
 
 const BetContainer: FC<BetContainerProps> = ({
@@ -25,29 +22,27 @@ const BetContainer: FC<BetContainerProps> = ({
   setAutoBet,
   autoBetRounds,
   setAutoBetRounds,
-  betAmounts,
-  selectedBet,
-  setSelectedBet,
   rollDice,
   rolling,
 }) => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const { activeGames, setUserSelectedActiveGame, userSelectedActiveGame } = useGameSocket();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const handleRollDice = () => {
-   console.log('Rolling dice') 
-   rollDice()
-  }
+    console.log('Rolling dice');
+    rollDice();
+  };
 
-  const scrollBets = (direction: "left" | "right") => {
-    if (!scrollContainerRef.current) return
+  const scrollBets = (direction: 'left' | 'right') => {
+    if (!scrollContainerRef.current) return;
 
-    const scrollAmount = scrollContainerRef.current.clientWidth * 0.5 * (direction === "left" ? -1 : 1)
+    const scrollAmount = scrollContainerRef.current.clientWidth * 0.5 * (direction === 'left' ? -1 : 1);
 
     scrollContainerRef.current.scrollBy({
       left: scrollAmount,
-      behavior: "smooth",
-    })
-  }
+      behavior: 'smooth',
+    });
+  };
 
   return (
     <Card className="w-full sm:w-3/4 bg-gray-800/80 backdrop-blur-sm rounded-lg border-1 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4">
@@ -64,11 +59,11 @@ const BetContainer: FC<BetContainerProps> = ({
                 type="button"
                 title="Auto Bet"
                 className={`relative inline-flex h-6 w-10 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-500 ${
-                  autoBet ? "bg-sky-500" : "bg-gray-600"
+                  autoBet ? 'bg-sky-500' : 'bg-gray-600'
                 }`}
               >
                 <span
-                  className={`${autoBet ? "translate-x-6" : "translate-x-1"} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                  className={`${autoBet ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                 />
               </button>
             </div>
@@ -95,7 +90,7 @@ const BetContainer: FC<BetContainerProps> = ({
             variant="ghost"
             size="icon"
             className="flex-shrink-0 bg-gray-800/50 text-sky-400 hover:bg-gray-800/70 z-10"
-            onClick={() => scrollBets("left")}
+            onClick={() => scrollBets('left')}
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -105,20 +100,20 @@ const BetContainer: FC<BetContainerProps> = ({
             <div
               ref={scrollContainerRef}
               className="flex space-x-2 pb-2 overflow-x-auto scrollbar-hide"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-              {betAmounts.map((amount) => (
-                <motion.div key={amount} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              {activeGames?.map((game) => (
+                <motion.div key={game?.id} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
-                    variant={selectedBet === amount ? "default" : "outline"}
-                    onClick={() => setSelectedBet(amount)}
+                    variant={userSelectedActiveGame?.id === game?.id ? 'default' : 'outline'}
+                    onClick={() => setUserSelectedActiveGame(game)}
                     className={`px-3 py-2 text-sm transition-all flex-shrink-0 ${
-                      selectedBet === amount
-                        ? "bg-sky-600 text-white border border-sky-500"
-                        : "bg-gray-800 text-gray-400 hover:bg-gray-700 opacity-40 hover:opacity-70"
+                      userSelectedActiveGame?.id === game?.id
+                        ? 'bg-sky-600 text-white border border-sky-500'
+                        : 'bg-gray-800 text-gray-400 hover:bg-gray-700 opacity-40 hover:opacity-70'
                     }`}
                   >
-                    {amount}
+                    {game?.stake}
                   </Button>
                 </motion.div>
               ))}
@@ -130,7 +125,7 @@ const BetContainer: FC<BetContainerProps> = ({
             variant="ghost"
             size="icon"
             className="flex-shrink-0 bg-gray-800/50 text-sky-400 hover:bg-gray-800/70 z-10"
-            onClick={() => scrollBets("right")}
+            onClick={() => scrollBets('right')}
             aria-label="Scroll right"
           >
             <ChevronRight className="h-4 w-4" />
@@ -140,16 +135,16 @@ const BetContainer: FC<BetContainerProps> = ({
           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="hidden sm:block flex-shrink-0">
             <Button
               onClick={handleRollDice}
-              disabled={!selectedBet || rolling}
+              disabled={!userSelectedActiveGame || rolling}
               className="w-full sm:w-auto py-2 px-4 text-sm bg-gradient-to-r from-sky-400 to-white hover:from-sky-500 hover:to-sky-100 text-black font-bold transition-all duration-300"
             >
-              {rolling ? "Rolling..." : "Bet & Roll"}
+              {rolling ? 'Rolling...' : 'Bet & Roll'}
             </Button>
           </motion.div>
         </div>
       </div>
     </Card>
-  )
-}
+  );
+};
 
-export default BetContainer
+export default BetContainer;

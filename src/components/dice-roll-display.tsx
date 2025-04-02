@@ -1,22 +1,19 @@
-"use client";
+'use client';
 
-import type { FC } from "react";
-import { Card } from "@/components/ui/card";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
-import Image from "next/image";
+import { Card } from '@/components/ui/card';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { useGameSocket } from '@/app/socketService';
 
-const bg = "/assets/images/desktop.png"; // desktop image
-const mobile = "/assets/images/stadium_bg.png"; // mobile image
+const bg = '/assets/images/desktop.png'; // desktop image
+const mobile = '/assets/images/stadium_bg.png'; // mobile image
 
-interface DiceRollDisplayProps {
-  rolling: boolean;
-  result: number | null;
-}
-
-export const DiceRollDisplay: FC<DiceRollDisplayProps> = ({ rolling, result }) => {
+export const DiceRollDisplay = () => {
   const [backgroundImage, setBackgroundImage] = useState<string>(bg);
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  const { userSelectedActiveGameResponse, isRollingGame } = useGameSocket();
 
   useEffect(() => {
     const updateBackground = () => {
@@ -30,8 +27,8 @@ export const DiceRollDisplay: FC<DiceRollDisplayProps> = ({ rolling, result }) =
     img.onload = () => setImageLoaded(true);
 
     updateBackground();
-    window.addEventListener("resize", updateBackground);
-    return () => window.removeEventListener("resize", updateBackground);
+    window.addEventListener('resize', updateBackground);
+    return () => window.removeEventListener('resize', updateBackground);
   }, []);
 
   return (
@@ -47,13 +44,13 @@ export const DiceRollDisplay: FC<DiceRollDisplayProps> = ({ rolling, result }) =
         placeholder="empty"
         onLoad={() => setImageLoaded(true)}
         style={{ opacity: imageLoaded ? 1 : 0 }}
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 50vw" 
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 50vw"
       />
 
       {/* Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center h-full z-10">
         <AnimatePresence mode="wait">
-          {rolling ? (
+          {isRollingGame ? (
             <motion.div
               key="rolling"
               animate={{ rotate: 360 }}
@@ -62,7 +59,7 @@ export const DiceRollDisplay: FC<DiceRollDisplayProps> = ({ rolling, result }) =
             >
               🎲
             </motion.div>
-          ) : result !== null ? (
+          ) : !!userSelectedActiveGameResponse ? (
             <motion.div
               key="result"
               initial={{ scale: 0 }}
@@ -76,7 +73,7 @@ export const DiceRollDisplay: FC<DiceRollDisplayProps> = ({ rolling, result }) =
                 animate={{ opacity: 1, y: 0 }}
                 className="text-xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500"
               >
-                Score: {result}
+                Score: {userSelectedActiveGameResponse?.record?.score}
               </motion.span>
             </motion.div>
           ) : (

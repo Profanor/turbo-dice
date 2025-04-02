@@ -1,41 +1,41 @@
-"use client"
+'use client';
 
-import type React from "react"
-import { HelpCircle } from "lucide-react"
-import { useEffect, useState } from "react"
-import { useGameSocket } from "@/app/socketService"
-import { motion } from "framer-motion"
-import UserDropdown from "./user-dropdown"
-import Image from "next/image"
+import type React from 'react';
+import { HelpCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useGameSocket } from '@/app/socketService';
+import { motion } from 'framer-motion';
+import UserDropdown from './user-dropdown';
+import Image from 'next/image';
 
-const user = "/assets/images/turbo_avatar.svg";
-const howToPlay = "/assets/images/how_to_play.svg";
-const chat = "/assets/images/bubble_chat.svg";
+const user = '/assets/images/turbo_avatar.svg';
+const howToPlay = '/assets/images/how_to_play.svg';
+const chat = '/assets/images/bubble_chat.svg';
 
 interface GameHeaderProps {
-  initialBalance: number
+  initialBalance: number;
 }
 
 const GameHeader: React.FC<GameHeaderProps> = () => {
-  const { isConnected, balance, currency } = useGameSocket()
-  const [isMobile, setIsMobile] = useState(false)
+  const { isConnected, balance, currency } = useGameSocket();
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    console.log("GameHeader Mounted")
-    console.log("WebSocket Connection Status:", isConnected)
+    console.log('GameHeader Mounted');
+    console.log('WebSocket Connection Status:', isConnected);
 
     // check if mobile on mount and when window resizes
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640)
-    }
+      setIsMobile(window.innerWidth < 640);
+    };
 
-    checkMobile()
-    window.addEventListener("resize", checkMobile)
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
 
     return () => {
-      window.removeEventListener("resize", checkMobile)
-    }
-  }, [isConnected])
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, [isConnected]);
 
   return (
     <div className="w-full bg-gray-800/80 py-3 px-4 sm:px-6 mb-6">
@@ -50,13 +50,7 @@ const GameHeader: React.FC<GameHeaderProps> = () => {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="cursor-pointer">
               {isMobile ? (
                 <div className="flex items-center gap-1">
-                  <Image
-                    src={howToPlay || "/placeholder.svg"}
-                    alt="How to play"
-                    width={24}
-                    height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6"
-                  />
+                  <Image src={howToPlay} alt="How to play" width={24} height={24} className="w-5 h-5 sm:w-6 sm:h-6" />
                   <span className="text-xs text-white font-medium hidden xs:inline">How to play?</span>
                 </div>
               ) : (
@@ -71,7 +65,9 @@ const GameHeader: React.FC<GameHeaderProps> = () => {
           {/* Balance + User + Message */}
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex items-center text-sm sm:text-md font-semibold text-green-500 whitespace-nowrap">
-              <span className="animate-pulse">{balance.toLocaleString()} {currency}</span>              
+              <span className="animate-pulse">
+                {balance.toLocaleString()} {currency}
+              </span>
             </div>
             <div className="h-4 w-[1px] bg-gray-600 hidden xs:block"></div>
             <div className="flex items-center gap-1 sm:gap-2">
@@ -85,7 +81,7 @@ const GameHeader: React.FC<GameHeaderProps> = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default GameHeader
+export default GameHeader;
