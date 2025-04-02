@@ -1,14 +1,12 @@
+import { useGameSocket } from '@/app/socketService';
 import { motion } from 'framer-motion';
 
-type RecentResultsDisplayProps = {
-  recentResults: number[];
-};
-
-const RecentResultsDisplay: React.FC<RecentResultsDisplayProps> = ({ recentResults }) => {
+const RecentResultsDisplay = () => {
+  const { playerRecentRolls } = useGameSocket();
   return (
-    <div className="flex items-center space-x-4 overflow-x-hidden">
-      {recentResults.length > 0 ? (
-        recentResults.map((res, idx) => (
+    <div className="flex items-center space-x-4 overflow-x-auto">
+      {playerRecentRolls?.length > 0 ? (
+        playerRecentRolls?.map((res, idx) => (
           <motion.div
             key={idx}
             initial={{ scale: 0, opacity: 0 }}

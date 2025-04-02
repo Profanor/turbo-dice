@@ -1,14 +1,11 @@
-import type { FC } from "react"
-import { Clock } from "lucide-react"
-import { Card } from "@/components/ui/card"
+import { Clock } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { useGameSocket } from '@/app/socketService';
+import { cn } from '@/lib/utils';
 
-interface TimerContainerProps {
-  timer: number
-  formatTime: (time: number) => string
-  isTimerRunning: boolean
-}
-
-export const TimerContainer: FC<TimerContainerProps> = ({ timer, formatTime, isTimerRunning }) => {
+export const TimerContainer = () => {
+  const { timeLeft } = useGameSocket();
+  console.log((timeLeft?.seconds ?? 10) <= 5);
   return (
     <Card className="w-full bg-gray-800/80 backdrop-blur-sm rounded-lg border-1 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4 h-full">
       <div className="flex flex-col items-center justify-center h-full gap-2">
@@ -16,12 +13,19 @@ export const TimerContainer: FC<TimerContainerProps> = ({ timer, formatTime, isT
           <Clock className="h-3 w-3 mr-1" /> Game Timer
         </span>
         <div className="flex flex-col items-center">
-          <div className={`text-xl font-bold ${timer <= 5 ? "text-red-500 animate-pulse" : "text-sky-400"}`}>
-            {formatTime(timer)}
+          <div
+            className={cn(
+              'text-xl font-bold',
+              (timeLeft?.seconds ?? 10) <= 5 ? 'text-red-500 animate-pulse' : 'text-sky-400',
+            )}
+          >
+            {`${timeLeft?.days ? `${timeLeft?.days}d` : ''} ${timeLeft?.hours ? `${timeLeft?.hours}h` : ''} ${timeLeft?.minutes ? `${timeLeft?.minutes}m` : ''} ${timeLeft?.seconds ? `${timeLeft?.seconds}s` : ''}`}
           </div>
-          <div className="text-xs text-gray-400 mt-1">{isTimerRunning ? "Game in progress" : "Waiting to start"}</div>
+          <div className="text-xs text-gray-400 mt-1">
+            {timeLeft?.seconds ? 'Game in progress' : 'Waiting to start'}
+          </div>
         </div>
       </div>
     </Card>
-  )
-}
+  );
+};
