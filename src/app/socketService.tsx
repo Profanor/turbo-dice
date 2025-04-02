@@ -154,7 +154,6 @@ export const GameSocketProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         if (decrypted && decrypted.balance !== undefined && decrypted.currency) {
           setBalance(decrypted.balance);
           setCurrency(decrypted.currency);
-          console.log('Balance:', decrypted.balance, 'Currency:', decrypted.currency);
         } else {
           console.error('Decryption failed or invalid balance data');
         }
@@ -177,7 +176,6 @@ export const GameSocketProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         const decrypted = decryptData(encryptedData);
         if (decrypted) {
           setActiveGames(decrypted?.games);
-          console.log('Decrypted Instant Tournament Data:', decrypted);
         } else {
           console.error('Decryption failed');
         }
@@ -189,7 +187,6 @@ export const GameSocketProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     socket.on('played_instant_tournament_game', (encryptedData: string) => {
       try {
         const decrypted = decryptData(encryptedData) as RolledInstantTournamentGameResponse;
-        console.log(decrypted);
         setIsRollingGame(false);
         setUserSelectedActiveGameResponse(decrypted);
         setPlayerRecentRolls((prev) => [decrypted?.record?.score, ...prev]);

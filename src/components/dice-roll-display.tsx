@@ -73,7 +73,7 @@ export const DiceRollDisplay = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500"
               >
-                Score: {userSelectedActiveGameResponse?.record?.score}
+                Score: {userSelectedActiveGameResponse?.record?.score.toLocaleString()}
               </motion.span>
             </motion.div>
           ) : (
