@@ -14,7 +14,7 @@ const RecentResultsDisplay = () => {
             transition={{ duration: 0.3, delay: idx * 0.05 }}
             className="px-3 py-1 rounded-full bg-gray-700 text-yellow-400 font-bold"
           >
-            {res}
+            {res.toLocaleString()}
           </motion.div>
         ))
       ) : (

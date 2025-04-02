@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils';
 
 export const TimerContainer = () => {
   const { timeLeft } = useGameSocket();
-  console.log((timeLeft?.seconds ?? 10) <= 5);
   return (
     <Card className="w-full bg-gray-800/80 backdrop-blur-sm rounded-lg border-1 border-sky-500/30 shadow-lg shadow-sky-500/10 p-4 h-full">
       <div className="flex flex-col items-center justify-center h-full gap-2">
