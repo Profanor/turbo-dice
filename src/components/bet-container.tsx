@@ -17,21 +17,10 @@ interface BetContainerProps {
   rolling: boolean;
 }
 
-const BetContainer: FC<BetContainerProps> = ({
-  autoBet,
-  setAutoBet,
-  autoBetRounds,
-  setAutoBetRounds,
-  rollDice,
-  rolling,
-}) => {
-  const { activeGames, setUserSelectedActiveGame, userSelectedActiveGame } = useGameSocket();
+const BetContainer: FC<BetContainerProps> = ({ autoBet, setAutoBet, autoBetRounds, setAutoBetRounds, rolling }) => {
+  const { activeGames, setUserSelectedActiveGame, userSelectedActiveGame, handleRollGame, isRollingGame } =
+    useGameSocket();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  const handleRollDice = () => {
-    console.log('Rolling dice');
-    rollDice();
-  };
 
   const scrollBets = (direction: 'left' | 'right') => {
     if (!scrollContainerRef.current) return;
@@ -134,8 +123,8 @@ const BetContainer: FC<BetContainerProps> = ({
           {/* bet & roll button */}
           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="hidden sm:block flex-shrink-0">
             <Button
-              onClick={handleRollDice}
-              disabled={!userSelectedActiveGame || rolling}
+              onClick={handleRollGame}
+              disabled={!userSelectedActiveGame || isRollingGame}
               className="w-full sm:w-auto py-2 px-4 text-sm bg-gradient-to-r from-sky-400 to-white hover:from-sky-500 hover:to-sky-100 text-black font-bold transition-all duration-300"
             >
               {rolling ? 'Rolling...' : 'Bet & Roll'}

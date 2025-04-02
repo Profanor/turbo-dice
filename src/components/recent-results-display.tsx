@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 const RecentResultsDisplay = () => {
   const { playerRecentRolls } = useGameSocket();
   return (
-    <div className="flex items-center space-x-4 overflow-x-hidden">
+    <div className="flex items-center space-x-4 overflow-x-auto">
       {playerRecentRolls?.length > 0 ? (
         playerRecentRolls?.map((res, idx) => (
           <motion.div
